@@ -5,14 +5,6 @@
  */
 package project.alice;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
 /**
  *
@@ -25,14 +17,6 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
-        try {
-
-            BufferedImage logo = ImageIO.read(new File("ProjectAlice.png"));
-            JLabel picLabel = new JLabel(new ImageIcon(logo));
-            add(picLabel);
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     /**
@@ -148,9 +132,6 @@ public class Main extends javax.swing.JFrame {
             .addGroup(userDetailsFrameLayout.createSequentialGroup()
                 .addGroup(userDetailsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(userDetailsFrameLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(continueToChatScreenButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(userDetailsFrameLayout.createSequentialGroup()
                         .addGap(183, 183, 183)
                         .addComponent(userDetailsTitleLabel))
                     .addGroup(userDetailsFrameLayout.createSequentialGroup()
@@ -158,7 +139,8 @@ public class Main extends javax.swing.JFrame {
                         .addGroup(userDetailsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(userDetailsFrameLayout.createSequentialGroup()
                                 .addGap(24, 24, 24)
-                                .addComponent(jLabel6))
+                                .addComponent(jLabel6)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(userDetailsFrameLayout.createSequentialGroup()
                                 .addGroup(userDetailsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(userDetailsFrameLayout.createSequentialGroup()
@@ -179,7 +161,8 @@ public class Main extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                                         .addComponent(jLabel21)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                                .addComponent(logoutButton)))))
+                                .addComponent(logoutButton))
+                            .addComponent(continueToChatScreenButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         userDetailsFrameLayout.setVerticalGroup(
@@ -208,9 +191,9 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel9))
                 .addGap(41, 41, 41)
-                .addComponent(jLabel6)
-                .addGap(39, 39, 39)
                 .addComponent(continueToChatScreenButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -390,7 +373,7 @@ public class Main extends javax.swing.JFrame {
 
         jLabel16.setText("Font:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Light Theme", "Dark Theme" }));
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -525,9 +508,9 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addComponent(chatGuestButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(settingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(26, 26, 26))
         );
 
         pack();
