@@ -5,17 +5,25 @@
  */
 package project.alice;
 
+import org.alicebot.ab.Bot;
+import org.alicebot.ab.Chat;
+
 
 /**
  *
  * @author arora
  */
 public class Main extends javax.swing.JFrame {
-
+        String botname="test";
+        Bot bot = new Bot(botname); 
+        Chat chatSession = new Chat(bot);
+        String mode = null;
+        
     /**
      * Creates new form Main
      */
     public Main() {
+
         initComponents();
     }
 
@@ -49,6 +57,7 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         bugReportField = new javax.swing.JTextArea();
         bugSubmitButton = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
         viewBugReportFrame = new javax.swing.JFrame();
         jLabel23 = new javax.swing.JLabel();
         viewBugReportLabel = new javax.swing.JLabel();
@@ -69,6 +78,8 @@ public class Main extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox();
         jLabel24 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
         AliceFrame = new javax.swing.JFrame();
         jLabel25 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -96,7 +107,9 @@ public class Main extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
 
-        userDetailsFrame.setPreferredSize(new java.awt.Dimension(450, 400));
+        userDetailsFrame.setMaximumSize(new java.awt.Dimension(450, 450));
+        userDetailsFrame.setMinimumSize(new java.awt.Dimension(450, 450));
+        userDetailsFrame.setPreferredSize(new java.awt.Dimension(450, 450));
 
         jLabel2.setText("Username: ");
 
@@ -109,8 +122,18 @@ public class Main extends javax.swing.JFrame {
         userDetailsTitleLabel.setText("User Details");
 
         logoutButton.setText("Logout");
+        logoutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutButtonActionPerformed(evt);
+            }
+        });
 
         continueToChatScreenButton.setText("Continue to Chat Screen");
+        continueToChatScreenButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                continueToChatScreenButtonActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Username Goes Here");
 
@@ -121,6 +144,11 @@ public class Main extends javax.swing.JFrame {
         jLabel9.setText("Class Goes Here");
 
         jButton1.setText("Edit Details");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/project/alice/ProjectAlice.png"))); // NOI18N
@@ -197,15 +225,17 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        submitBugFrame.setMaximumSize(new java.awt.Dimension(450, 300));
+        submitBugFrame.setMinimumSize(new java.awt.Dimension(450, 300));
         submitBugFrame.setPreferredSize(new java.awt.Dimension(450, 300));
-        submitBugFrame.getContentPane().setLayout(new java.awt.GridLayout(4, 0));
+        submitBugFrame.getContentPane().setLayout(new java.awt.GridLayout(5, 0));
 
         jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/project/alice/ProjectAlice.png"))); // NOI18N
         jLabel22.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         submitBugFrame.getContentPane().add(jLabel22);
 
-        bugReportLabel.setText("Enter Bug Report:");
+        bugReportLabel.setText(" Enter Bug Report:");
         submitBugFrame.getContentPane().add(bugReportLabel);
 
         bugReportField.setColumns(20);
@@ -221,6 +251,14 @@ public class Main extends javax.swing.JFrame {
             }
         });
         submitBugFrame.getContentPane().add(bugSubmitButton);
+
+        jButton8.setText("Back");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        submitBugFrame.getContentPane().add(jButton8);
 
         viewBugReportFrame.setPreferredSize(new java.awt.Dimension(600, 500));
         viewBugReportFrame.getContentPane().setLayout(new java.awt.GridLayout(6, 2));
@@ -261,6 +299,8 @@ public class Main extends javax.swing.JFrame {
         jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/project/alice/ProjectAlice.png"))); // NOI18N
 
+        jLabel19.setText("DOB: ");
+
         javax.swing.GroupLayout changeUserDetailsFrameLayout = new javax.swing.GroupLayout(changeUserDetailsFrame.getContentPane());
         changeUserDetailsFrame.getContentPane().setLayout(changeUserDetailsFrameLayout);
         changeUserDetailsFrameLayout.setHorizontalGroup(
@@ -284,12 +324,14 @@ public class Main extends javax.swing.JFrame {
                                 .addGroup(changeUserDetailsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel11)
                                     .addComponent(jLabel12)
-                                    .addComponent(jLabel13))
+                                    .addComponent(jLabel13)
+                                    .addComponent(jLabel19))
                                 .addGap(18, 18, 18)
                                 .addGroup(changeUserDetailsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jPasswordField1)
                                     .addComponent(jTextField1)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextField2))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -316,21 +358,45 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(changeUserDetailsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(changeUserDetailsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGap(37, 37, 37)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        AliceFrame.setMaximumSize(new java.awt.Dimension(570, 550));
+        AliceFrame.setMinimumSize(new java.awt.Dimension(570, 550));
+        AliceFrame.setPreferredSize(new java.awt.Dimension(570, 550));
 
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/project/alice/ProjectAlice.png"))); // NOI18N
 
         jScrollPane3.setViewportView(chatScreen);
 
-        jButton4.setText("Logout");
+        chatField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chatFieldActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Back");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton7.setText("Submit Bug Report");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout AliceFrameLayout = new javax.swing.GroupLayout(AliceFrame.getContentPane());
         AliceFrame.getContentPane().setLayout(AliceFrameLayout);
@@ -355,8 +421,8 @@ public class Main extends javax.swing.JFrame {
         );
         AliceFrameLayout.setVerticalGroup(
             AliceFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AliceFrameLayout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
+            .addGroup(AliceFrameLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel25)
                 .addGap(18, 18, 18)
                 .addGroup(AliceFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -366,8 +432,12 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(chatField, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(75, Short.MAX_VALUE))
         );
+
+        settingsFrame.setMaximumSize(new java.awt.Dimension(400, 400));
+        settingsFrame.setMinimumSize(new java.awt.Dimension(400, 400));
+        settingsFrame.setPreferredSize(new java.awt.Dimension(400, 400));
 
         jLabel15.setText("Theme:");
 
@@ -378,8 +448,18 @@ public class Main extends javax.swing.JFrame {
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jButton5.setText("Change");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Back");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jLabel17.setText("Settings");
 
@@ -446,10 +526,25 @@ public class Main extends javax.swing.JFrame {
         userType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Student", "Staff", "Administrator", "Developer" }));
 
         loginButton.setText("Login");
+        loginButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginButtonActionPerformed(evt);
+            }
+        });
 
         chatGuestButton.setText("Chat as Guest");
+        chatGuestButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chatGuestButtonActionPerformed(evt);
+            }
+        });
 
         settingsButton.setText("Settings");
+        settingsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsButtonActionPerformed(evt);
+            }
+        });
 
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/project/alice/ProjectAlice.png"))); // NOI18N
@@ -520,6 +615,80 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_bugSubmitButtonActionPerformed
 
+    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
+        this.setVisible(false);
+        userDetailsFrame.setVisible(true);
+    }//GEN-LAST:event_loginButtonActionPerformed
+
+    private void chatFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chatFieldActionPerformed
+
+        chatScreen.setText(chatScreen.getText() + "User: " + chatField.getText() + "\n");
+        String request = chatField.getText();
+        chatField.setText(null);
+        String response = chatSession.multisentenceRespond(request);
+        chatScreen.setText(chatScreen.getText() + "Alice: " + response + "\n");
+        
+        
+    }//GEN-LAST:event_chatFieldActionPerformed
+
+    private void chatGuestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chatGuestButtonActionPerformed
+        mode = "Guest";
+        this.setVisible(false);
+        AliceFrame.setVisible(true);
+        jButton7.setVisible(false);  
+    }//GEN-LAST:event_chatGuestButtonActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+
+        AliceFrame.setVisible(false);
+        if(!mode.equals("Guest")) {
+            userDetailsFrame.setVisible(true);
+        }
+        else {
+            this.setVisible(true);
+        }
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
+        
+        this.setVisible(false);
+        settingsFrame.setVisible(true);
+    }//GEN-LAST:event_settingsButtonActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        settingsFrame.setVisible(false);
+        this.setVisible(true);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        AliceFrame.setVisible(false);
+        submitBugFrame.setVisible(true);
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        submitBugFrame.setVisible(false);
+        AliceFrame.setVisible(true);
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void continueToChatScreenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continueToChatScreenButtonActionPerformed
+        userDetailsFrame.setVisible(false);
+        AliceFrame.setVisible(true);
+    }//GEN-LAST:event_continueToChatScreenButtonActionPerformed
+
+    private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_logoutButtonActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        userDetailsFrame.setVisible(false);
+        changeUserDetailsFrame.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -576,6 +745,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JComboBox jComboBox3;
@@ -589,6 +759,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
@@ -609,6 +780,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JButton loginButton;
     private javax.swing.JButton logoutButton;
     private javax.swing.JPasswordField passField;
