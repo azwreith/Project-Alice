@@ -5,6 +5,13 @@
  */
 package project.alice;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.alicebot.ab.Bot;
 import org.alicebot.ab.Chat;
 
@@ -19,12 +26,48 @@ public class Main extends javax.swing.JFrame {
         Chat chatSession = new Chat(bot);
         String mode = null;
         
+        String url = "jdbc:mysql://localhost:3306/projectalice";
+        String dbusername = "root";
+        String dbpassword = "omgitsujj"; 
+        Connection conn;     
+        Statement stmt;
+        ResultSet rs;
+        
+        
+        String user;
+        String type;
+ 
     /**
      * Creates new form Main
+     * @param md5
+     * @return 
      */
-    public Main() {
+    public String MD5(String md5) {
+       try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(md5.getBytes());
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < array.length; ++i) {
+              sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+           }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+        }
+        return null;
+    }        
 
-        initComponents();
+    public Main() {
+        initComponents();   
+        
+        System.out.println("Connecting database...");
+        try {
+            conn = DriverManager.getConnection(url, dbusername, dbpassword);
+            System.out.println("Database connected!");
+            
+        } catch (SQLException e) {
+            System.err.println("Cannot Connect: " + e);
+        }
+        
     }
 
     /**
@@ -106,10 +149,16 @@ public class Main extends javax.swing.JFrame {
         settingsButton = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
 
         userDetailsFrame.setMaximumSize(new java.awt.Dimension(450, 450));
         userDetailsFrame.setMinimumSize(new java.awt.Dimension(450, 450));
         userDetailsFrame.setPreferredSize(new java.awt.Dimension(450, 450));
+        userDetailsFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                userDetailsFrameWindowActivated(evt);
+            }
+        });
 
         jLabel2.setText("Username: ");
 
@@ -198,10 +247,10 @@ public class Main extends javax.swing.JFrame {
             .addGroup(userDetailsFrameLayout.createSequentialGroup()
                 .addComponent(jLabel21)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(userDetailsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(userDetailsTitleLabel)
+                .addGroup(userDetailsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(logoutButton)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(userDetailsTitleLabel))
                 .addGap(67, 67, 67)
                 .addGroup(userDetailsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -225,9 +274,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        submitBugFrame.setMaximumSize(new java.awt.Dimension(450, 300));
         submitBugFrame.setMinimumSize(new java.awt.Dimension(450, 300));
-        submitBugFrame.setPreferredSize(new java.awt.Dimension(450, 300));
         submitBugFrame.getContentPane().setLayout(new java.awt.GridLayout(5, 0));
 
         jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -260,6 +307,8 @@ public class Main extends javax.swing.JFrame {
         });
         submitBugFrame.getContentPane().add(jButton8);
 
+        viewBugReportFrame.setMaximumSize(new java.awt.Dimension(600, 500));
+        viewBugReportFrame.setMinimumSize(new java.awt.Dimension(600, 500));
         viewBugReportFrame.setPreferredSize(new java.awt.Dimension(600, 500));
         viewBugReportFrame.getContentPane().setLayout(new java.awt.GridLayout(6, 2));
 
@@ -279,7 +328,12 @@ public class Main extends javax.swing.JFrame {
         deleteBugButton.setText("Delete");
         viewBugReportFrame.getContentPane().add(deleteBugButton);
 
-        backFromBugButton.setText("Back");
+        backFromBugButton.setText("Logout");
+        backFromBugButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backFromBugButtonActionPerformed(evt);
+            }
+        });
         viewBugReportFrame.getContentPane().add(backFromBugButton);
 
         jButton2.setText("Logout");
@@ -369,9 +423,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        AliceFrame.setMaximumSize(new java.awt.Dimension(570, 550));
         AliceFrame.setMinimumSize(new java.awt.Dimension(570, 550));
-        AliceFrame.setPreferredSize(new java.awt.Dimension(570, 550));
 
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/project/alice/ProjectAlice.png"))); // NOI18N
@@ -435,9 +487,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(75, Short.MAX_VALUE))
         );
 
-        settingsFrame.setMaximumSize(new java.awt.Dimension(400, 400));
         settingsFrame.setMinimumSize(new java.awt.Dimension(400, 400));
-        settingsFrame.setPreferredSize(new java.awt.Dimension(400, 400));
 
         jLabel15.setText("Theme:");
 
@@ -518,12 +568,17 @@ public class Main extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         usernameLabel.setText("Username: ");
 
         passwordLabel.setText("Password: ");
 
-        userType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Student", "Staff", "Administrator", "Developer" }));
+        userType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Student", "Teacher", "Administrator", "Developer" }));
 
         loginButton.setText("Login");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
@@ -549,29 +604,14 @@ public class Main extends javax.swing.JFrame {
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/project/alice/ProjectAlice.png"))); // NOI18N
 
+        jLabel27.setForeground(new java.awt.Color(0, 153, 153));
+        jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel27.setText("Invalid User/Pass");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(213, 213, 213)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(passwordLabel)
-                    .addComponent(usernameLabel))
-                .addGap(44, 44, 44)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(chatGuestButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(userType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(userField)
-                            .addComponent(passField)
-                            .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 101, Short.MAX_VALUE)
-                        .addComponent(jLabel18)
-                        .addGap(375, 375, 375))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -581,6 +621,27 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel20)
                         .addGap(288, 288, 288))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(213, 213, 213)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(passwordLabel)
+                    .addComponent(usernameLabel))
+                .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 101, Short.MAX_VALUE)
+                        .addComponent(jLabel18)
+                        .addGap(375, 375, 375))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(chatGuestButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(userType, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(userField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(passField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(loginButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -591,7 +652,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(userType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(userField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(usernameLabel))
@@ -604,7 +665,9 @@ public class Main extends javax.swing.JFrame {
                 .addGap(39, 39, 39)
                 .addComponent(chatGuestButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(settingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(settingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27))
                 .addGap(26, 26, 26))
         );
 
@@ -616,8 +679,39 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bugSubmitButtonActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        this.setVisible(false);
-        userDetailsFrame.setVisible(true);
+        
+            try {
+                stmt = conn.createStatement();
+                rs = stmt.executeQuery("SELECT * FROM USER WHERE u_id = '" + userField.getText() + "' AND pass = '" + MD5(new String(passField.getPassword())) + "' AND type = '" + userType.getSelectedItem() +"'");
+                
+                if (rs.next()) {
+                    user = rs.getString("u_id");
+                    type = rs.getString("type");
+                    
+                    if(type.equals("Student") || type.equals("Teacher")) {
+                        this.setVisible(false);
+                        userDetailsFrame.setVisible(true);
+                    }
+                    
+                    if(type.equals("Administrator")) {
+                        this.setVisible(false);
+                        //TODO: ADMIN PAGE
+                    }
+                    if(type.equals("Developer")) {
+                        this.setVisible(false);
+                        viewBugReportFrame.setVisible(true);
+                    }
+                 
+
+                }
+                else {
+                    jLabel27.setVisible(true);
+                }
+                stmt.close();
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void chatFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chatFieldActionPerformed
@@ -688,6 +782,25 @@ public class Main extends javax.swing.JFrame {
         userDetailsFrame.setVisible(false);
         changeUserDetailsFrame.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        jLabel27.setVisible(false);
+    }//GEN-LAST:event_formWindowActivated
+
+    private void backFromBugButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backFromBugButtonActionPerformed
+        user = null;
+        viewBugReportFrame.setVisible(false);
+        this.setVisible(true);
+    }//GEN-LAST:event_backFromBugButtonActionPerformed
+
+    private void userDetailsFrameWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_userDetailsFrameWindowActivated
+            try {
+                stmt = conn.createStatement();
+                stmt.executeQuery("SELECT * FROM User NATURAL JOIN SECTION WHERE u_id = '" + user + "'");
+            } catch (SQLException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }//GEN-LAST:event_userDetailsFrameWindowActivated
 
     /**
      * @param args the command line arguments
@@ -768,6 +881,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
