@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.alicebot.ab.Bot;
@@ -23,8 +24,10 @@ import org.alicebot.ab.Chat;
 public class Main extends javax.swing.JFrame {
         String botname="test";
         Bot bot = new Bot(botname); 
-        Chat chatSession = new Chat(bot);
-        String mode = null;
+        Chat chatSession;
+        HashMap<String, Chat> sessions = new HashMap<>();
+        // TODO: WRITE HASHMAP to a file
+
         
         String url = "jdbc:mysql://localhost:3306/projectalice";
         String dbusername = "root";
@@ -34,8 +37,8 @@ public class Main extends javax.swing.JFrame {
         ResultSet rs;
         
         
-        String user;
-        String type;
+        String user = null;
+        String type = null;
  
     /**
      * Creates new form Main
@@ -151,9 +154,9 @@ public class Main extends javax.swing.JFrame {
         jLabel20 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
 
-        userDetailsFrame.setMaximumSize(new java.awt.Dimension(450, 450));
-        userDetailsFrame.setMinimumSize(new java.awt.Dimension(450, 450));
-        userDetailsFrame.setPreferredSize(new java.awt.Dimension(450, 450));
+        userDetailsFrame.setMaximumSize(new java.awt.Dimension(450, 500));
+        userDetailsFrame.setMinimumSize(new java.awt.Dimension(450, 500));
+        userDetailsFrame.setPreferredSize(new java.awt.Dimension(450, 500));
         userDetailsFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 userDetailsFrameWindowActivated(evt);
@@ -191,6 +194,8 @@ public class Main extends javax.swing.JFrame {
         jLabel8.setText("Name Goes Here");
 
         jLabel9.setText("Class Goes Here");
+        jLabel9.setToolTipText("");
+        jLabel9.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         jButton1.setText("Edit Details");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -264,17 +269,19 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel7))
                 .addGap(18, 18, 18)
-                .addGroup(userDetailsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(userDetailsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel9))
-                .addGap(41, 41, 41)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(continueToChatScreenButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        submitBugFrame.setMaximumSize(new java.awt.Dimension(450, 300));
         submitBugFrame.setMinimumSize(new java.awt.Dimension(450, 300));
+        submitBugFrame.setPreferredSize(new java.awt.Dimension(450, 300));
         submitBugFrame.getContentPane().setLayout(new java.awt.GridLayout(5, 0));
 
         jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -423,7 +430,14 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        AliceFrame.setMaximumSize(new java.awt.Dimension(570, 550));
         AliceFrame.setMinimumSize(new java.awt.Dimension(570, 550));
+        AliceFrame.setPreferredSize(new java.awt.Dimension(570, 550));
+        AliceFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                AliceFrameWindowActivated(evt);
+            }
+        });
 
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/project/alice/ProjectAlice.png"))); // NOI18N
@@ -726,7 +740,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_chatFieldActionPerformed
 
     private void chatGuestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chatGuestButtonActionPerformed
-        mode = "Guest";
+        type = "Guest";
         this.setVisible(false);
         AliceFrame.setVisible(true);
         jButton7.setVisible(false);  
@@ -735,7 +749,7 @@ public class Main extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
 
         AliceFrame.setVisible(false);
-        if(!mode.equals("Guest")) {
+        if(!type.equals("Guest")) {
             userDetailsFrame.setVisible(true);
         }
         else {
@@ -775,7 +789,10 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_continueToChatScreenButtonActionPerformed
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
-        // TODO add your handling code here:
+        user = null;
+        type = null;
+        userDetailsFrame.setVisible(false);
+        this.setVisible(true);
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -785,10 +802,13 @@ public class Main extends javax.swing.JFrame {
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         jLabel27.setVisible(false);
+        userField.setText("");
+        passField.setText("");
     }//GEN-LAST:event_formWindowActivated
 
     private void backFromBugButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backFromBugButtonActionPerformed
         user = null;
+        type = null;
         viewBugReportFrame.setVisible(false);
         this.setVisible(true);
     }//GEN-LAST:event_backFromBugButtonActionPerformed
@@ -796,11 +816,46 @@ public class Main extends javax.swing.JFrame {
     private void userDetailsFrameWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_userDetailsFrameWindowActivated
             try {
                 stmt = conn.createStatement();
-                stmt.executeQuery("SELECT * FROM User NATURAL JOIN SECTION WHERE u_id = '" + user + "'");
+                if(type.equals("Student")) {
+                    rs = stmt.executeQuery("SELECT * FROM User NATURAL LEFT OUTER JOIN SECTION WHERE u_id = '" + user + "'");  
+                }
+                else if(type.equals("Teacher")) {
+                    rs = stmt.executeQuery("SELECT DISTINCT f_name, l_name, dob, class, section FROM User LEFT OUTER JOIN Schedule ON u_id = teacher WHERE u_id = '" + user + "'");
+                }
+
+                rs.next();
+                jLabel3.setText(user);
+                jLabel8.setText(rs.getString("f_name") + " " + rs.getString("l_name"));
+                jLabel7.setText(rs.getString("dob"));
+                jLabel9.setText("<html>");
+                do {
+                    if(type.equals("Student")) {
+                        jLabel9.setText(jLabel9.getText() + rs.getString("section") + " ");   
+                    }
+                    if(type.equals("Teacher")) {
+                        jLabel9.setText(jLabel9.getText() + rs.getString("class") + ":" + rs.getString("section") + "<br>");   
+                    }
+                } while(rs.next());
+                jLabel9.setText(jLabel9.getText() + "</html>");
             } catch (SQLException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
     }//GEN-LAST:event_userDetailsFrameWindowActivated
+
+    private void AliceFrameWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_AliceFrameWindowActivated
+        chatScreen.setText("");
+        chatField.setText("");
+        
+        //Create a new chat session
+        if(sessions.containsKey(user)) {
+            chatSession = sessions.get(user);
+        }
+        else {
+            chatSession = new Chat(bot); 
+            sessions.put(user, chatSession);
+        }
+
+    }//GEN-LAST:event_AliceFrameWindowActivated
 
     /**
      * @param args the command line arguments
