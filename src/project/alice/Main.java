@@ -33,8 +33,6 @@ public class Main extends javax.swing.JFrame {
         String dbusername = "root";
         String dbpassword = "omgitsujj"; 
         Connection conn;     
-        Statement stmt;
-        ResultSet rs;
         
         
         String user = null;
@@ -317,6 +315,11 @@ public class Main extends javax.swing.JFrame {
         viewBugReportFrame.setMaximumSize(new java.awt.Dimension(600, 500));
         viewBugReportFrame.setMinimumSize(new java.awt.Dimension(600, 500));
         viewBugReportFrame.setPreferredSize(new java.awt.Dimension(600, 500));
+        viewBugReportFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                viewBugReportFrameWindowActivated(evt);
+            }
+        });
         viewBugReportFrame.getContentPane().setLayout(new java.awt.GridLayout(6, 2));
 
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -326,6 +329,11 @@ public class Main extends javax.swing.JFrame {
         viewBugReportLabel.setText("Choose a bug report to view:");
         viewBugReportFrame.getContentPane().add(viewBugReportLabel);
 
+        bugReportsCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bugReportsComboActionPerformed(evt);
+            }
+        });
         viewBugReportFrame.getContentPane().add(bugReportsCombo);
 
         jScrollPane2.setViewportView(bugReportDesc);
@@ -688,15 +696,11 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bugSubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bugSubmitButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bugSubmitButtonActionPerformed
-
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         
             try {
-                stmt = conn.createStatement();
-                rs = stmt.executeQuery("SELECT * FROM USER WHERE u_id = '" + userField.getText() + "' AND pass = '" + MD5(new String(passField.getPassword())) + "' AND type = '" + userType.getSelectedItem() +"'");
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM USER WHERE u_id = '" + userField.getText() + "' AND pass = '" + MD5(new String(passField.getPassword())) + "' AND type = '" + userType.getSelectedItem() +"'");
                 
                 if (rs.next()) {
                     user = rs.getString("u_id");
@@ -707,11 +711,11 @@ public class Main extends javax.swing.JFrame {
                         userDetailsFrame.setVisible(true);
                     }
                     
-                    if(type.equals("Administrator")) {
+                    else if(type.equals("Administrator")) {
                         this.setVisible(false);
                         //TODO: ADMIN PAGE
                     }
-                    if(type.equals("Developer")) {
+                    else if(type.equals("Developer")) {
                         this.setVisible(false);
                         viewBugReportFrame.setVisible(true);
                     }
@@ -781,6 +785,7 @@ public class Main extends javax.swing.JFrame {
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         submitBugFrame.setVisible(false);
         AliceFrame.setVisible(true);
+        bugReportField.setText("");
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void continueToChatScreenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continueToChatScreenButtonActionPerformed
@@ -815,7 +820,8 @@ public class Main extends javax.swing.JFrame {
 
     private void userDetailsFrameWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_userDetailsFrameWindowActivated
             try {
-                stmt = conn.createStatement();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = null;
                 if(type.equals("Student")) {
                     rs = stmt.executeQuery("SELECT * FROM User NATURAL LEFT OUTER JOIN SECTION WHERE u_id = '" + user + "'");  
                 }
@@ -837,9 +843,11 @@ public class Main extends javax.swing.JFrame {
                     }
                 } while(rs.next());
                 jLabel9.setText(jLabel9.getText() + "</html>");
+                stmt.close();
             } catch (SQLException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
     }//GEN-LAST:event_userDetailsFrameWindowActivated
 
     private void AliceFrameWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_AliceFrameWindowActivated
@@ -856,6 +864,49 @@ public class Main extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_AliceFrameWindowActivated
+
+    private void bugSubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bugSubmitButtonActionPerformed
+        
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.execute("INSERT INTO BugReport(u_id, detail) VALUES('" + user + "', '" + bugReportField.getText() + "')");
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        submitBugFrame.setVisible(false);
+        AliceFrame.setVisible(true);
+        bugReportField.setText("");
+    }//GEN-LAST:event_bugSubmitButtonActionPerformed
+
+    private void viewBugReportFrameWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_viewBugReportFrameWindowActivated
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM BugReport");
+            while(rs.next()) {
+                bugReportsCombo.addItem("Report ID: " + rs.getString("report_id"));
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_viewBugReportFrameWindowActivated
+
+    private void bugReportsComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bugReportsComboActionPerformed
+        try {
+            bugReportDesc.setText("");
+            Statement stmt = conn.createStatement();
+            String report = bugReportsCombo.getSelectedItem().toString().substring(11);
+            System.out.println(report);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM BugReport WHERE report_id = " + report);
+            rs.next();
+            bugReportDesc.setText(rs.getString("detail") + "\n\n-" + rs.getString("u_id"));
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+    }//GEN-LAST:event_bugReportsComboActionPerformed
 
     /**
      * @param args the command line arguments
